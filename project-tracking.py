@@ -1,41 +1,42 @@
 import datetime 
 
+pos_answer = ['yes','y']
+neg_answer = ['no','n']
+
+user_projects = {}
+
+def project_entry():
 # User inputs number of hours needed to complete project
-hoursNeededinMinutes = input("Enter the number of hours your project will take: ")
-hoursNeededinMinutes*= 60
+	name = raw_input("What is the name of the project you're working on? ")
 
-# User inputs average number of minutes they can spend on their project in decimal
-avgDailyMinutes = input("Enter the the number of minutes you will spend on \
-project per day: ")
+# User inputs number of hours needed to complete project
+	time = input("Enter the number of hours your project will take: ")#should add %r % name here
+	time *= 60
+	user_projects[name] = time
 
-# Calculate number of days required by divide total time needed over avg num 
-# of hours
+# Prompt user to enter data on additional projects
+ans = raw_input("Are you currently working on any projects?: ")
+while ans.lower() not in neg_answer:
+	project_entry()
+	ans = raw_input("Do you have any more projects to work on?: ")
 
-if hoursNeededinMinutes % avgDailyMinutes == 0:
-    daysNeeded = hoursNeededinMinutes/avgDailyMinutes
-daysNeeded = hoursNeededinMinutes/avgDailyMinutes + 1
+# User inputs average number of minutes they can spend on their projects
+avgTotalDailyTime = input("Enter the the number of minutes you have to spend on your projects \
+or projects per day: ")
 
-# Tell user the date they will finish their project 
-completionDate = (datetime.date.today() + datetime.timedelta(daysNeeded)).isoformat()
-print completionDate
-
-
-
-# VERSION TO DO
-
-# V0.1 - Script calculates time to complete one project
-
-# V.2 - Script provides time to complete multiple projects
-# User inputs each projects completion date
-# Prompt user to ask if they have additional projects they
-# Calculate completion date for each project if user spent equal 
-# time on each task
-
-# V.3 
-# Allow the user to designate the number of minutes they will spend on each project
-
-
-
-# Other
-# Prompt user for how much time they want to spend on their project with some choices.
-# have an other choice for custom values
+# Create an ordered list of tupples from the user_projects dictionary
+new_user_projects = sorted(user_projects.items(), key=lambda t: t[1])
+for i in range(len(new_user_projects)):
+	timePerProject = avgTotalDailyTime/len(new_user_projects[i:])
+	# Calculate number of days required to complete the smallest project
+	smallestProjectTime = new_user_projects[i:][0][1]
+	smallestProject = new_user_projects[i:][0][0]
+	i+1
+	if smallestProjectTime % timePerProject == 0:
+		daysNeeded = smallestProjectTime/timePerProject
+	daysNeeded = smallestProjectTime/timePerProject + 1
+	completionDate = (datetime.date.today() + datetime.timedelta(daysNeeded)).isoformat()
+	# Tell user the date they will finish their project 
+	print "If you work on your %s project everyday for %r minutes you will complete your project in\
+	%r days on %r" % (smallestProject, timePerProject, daysNeeded, completionDate)
+	
