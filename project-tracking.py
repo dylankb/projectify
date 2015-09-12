@@ -10,7 +10,7 @@ def project_entry():
 	name = raw_input("What is the name of the project you're working on? ")
 
 # User inputs number of hours needed to complete project
-	time = input("Enter the number of hours your project will take: ")#should add %r % name here
+	time = input("Enter the number of hours your project will take: ")
 	time *= 60
 	user_projects[name] = time
 
@@ -36,7 +36,7 @@ for i in range(len(new_user_projects)):
 	smallestProjectTime = new_user_projects[i:][0][1] - prevWorkDoneMin
 	smallestProject = new_user_projects[i:][0][0]
 	i+=1
-	# Calculate the number of days it will take to complete the smallest project remaining project
+	# Calculate the number of days it will take to complete the smallest project, and subtract time from larger projects still being worked on
 	if smallestProjectTime % timePerProject == 0:
 		daysNeeded = smallestProjectTime/timePerProject
 		prevWorkDoneMin += daysNeeded * timePerProject
@@ -53,4 +53,3 @@ for i in range(len(new_user_projects)):
 	# Tell user the date they will finish their project or projects
 	print "If you split your %r minutes of time evenly across all your projects you will complete your %s project in\
  %r days on %r" % (avgTotalDailyTime, smallestProject, prevWorkDoneDay, completionDate)
-	
