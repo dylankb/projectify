@@ -6,23 +6,56 @@ neg_answer = ['no','n']
 user_projects = {}
 
 def project_entry():
-# User inputs number of hours needed to complete project
+# User names their project
 	name = raw_input("What is the name of the project you're working on? ")
+	while not name:
+		print 'Please enter a name for your project.'
+		name = raw_input("What is the name of the project you're working on? ")
 
-# User inputs number of hours needed to complete project
-	time = input("Enter the number of hours your project will take: ")
-	time *= 60
-	user_projects[name] = time
+# User inputs number of hours needed to complete the project
+	while True:
+		try:
+			time = float(raw_input("Enter the number of hours your project will take: "))
+		except ValueError:
+			print "Please enter a number (integer) greater than zero."
+			continue
+		if time <= 0:
+			print "Please enter a number (integer) greater than zero."
+			continue
+		else:
+			time *= 60
+			user_projects[name] = time
+			break
 
 # Prompt user to enter data on additional projects
-ans = raw_input("Are you currently working on any projects?: ")
-while ans.lower() not in neg_answer:
-	project_entry()
-	ans = raw_input("Do you have any more projects to work on?: ")
+ans = raw_input("Are you currently working on any projects?(Yes/No): ")
+while ans.lower() not in pos_answer and ans.lower() not in neg_answer:
+	print 'Please enter Yes or No as a response.'
+	ans = raw_input("Are you currently working on any projects?(Yes/No): ")
+if ans.lower() in neg_answer:
+	print 'Ok, good bye!'
+	exit()
+else:
+	while ans.lower() in pos_answer:
+		project_entry()
+		ans = raw_input("Do you have any more projects to work on?(Yes/No): ")
+		while ans.lower() not in pos_answer and ans.lower() not in neg_answer:
+			print 'Please enter Yes or No as a response.'
+			ans = raw_input("Do you have any more projects to work on?(Yes/No): ")
 
-# User inputs average number of minutes they can spend on their projects
-avgTotalDailyTime = input("Enter the the number of minutes you have to spend on your projects \
-or projects per day: ")
+# User inputs average number of minutes they can spend on their project(s) per day
+while True:
+	try:
+		avgTotalDailyTime = float(raw_input('Enter the the number of minutes you have to spend on your projects \
+or projects per day: '))
+	except ValueError:
+		print "Please enter a number (integer) greater than zero."
+		continue
+	if avgTotalDailyTime <= 0:
+		print "Please enter a number (integer) greater than zero."
+		continue
+	else:
+		break
 
 prevWorkDoneMin = 0
 prevWorkDoneDay = 0
@@ -43,9 +76,9 @@ for i in range(len(new_user_projects)):
 	else:
 		daysNeeded = smallestProjectTime/timePerProject + 1
 		if len(new_user_projects[i:]) != 0:
-		    prevWorkDoneMin += (daysNeeded * timePerProject) + (timePerProject - smallestProjectTime % timePerProject) / len(new_user_projects[i:])
+			prevWorkDoneMin += (daysNeeded * timePerProject) + (timePerProject - smallestProjectTime % timePerProject) / len(new_user_projects[i:])
 		else: 
-		    prevWorkDoneMin += (daysNeeded * timePerProject) + (timePerProject - smallestProjectTime % timePerProject) / len(new_user_projects)
+			prevWorkDoneMin += (daysNeeded * timePerProject) + (timePerProject - smallestProjectTime % timePerProject) / len(new_user_projects)
 		  
 	# Calculate the completion date of the smallest remaining project
 	completionDate = (datetime.date.today() + datetime.timedelta(daysNeeded + prevWorkDoneDay)).isoformat()
